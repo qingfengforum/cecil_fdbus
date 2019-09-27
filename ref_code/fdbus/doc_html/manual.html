@@ -1,0 +1,1065 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>FDBus Manual &#8212; FDbus 1.0 documentation</title>
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Introduction" href="readme.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="readme.html" title="Introduction"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">FDbus 1.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="fdbus-manual">
+<h1>FDBus Manual<a class="headerlink" href="#fdbus-manual" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="abstract">
+<h2>Abstract<a class="headerlink" href="#abstract" title="Permalink to this headline">¶</a></h2>
+<p>This manual describes a new type of <code class="docutils literal notranslate"><span class="pre">IPC</span></code> mechanism: Fast Distributed Bus (<code class="docutils literal notranslate"><span class="pre">FDBus</span></code>).
+From the perspective of <code class="docutils literal notranslate"><span class="pre">IPC</span></code> (Inter-Process Communication), <code class="docutils literal notranslate"><span class="pre">FDBus</span></code> has similarities
+with widely used <code class="docutils literal notranslate"><span class="pre">D-Bus</span></code> (Desktop Bus), but <code class="docutils literal notranslate"><span class="pre">FDBus</span></code> has its own advantages, more complete
+functions, higher performance and convenient use. It can also be networked between multiple hosts
+in addition to supporting <code class="docutils literal notranslate"><span class="pre">IPC</span></code> in the host. And can customize security policies to support
+different security levels. <code class="docutils literal notranslate"><span class="pre">FDBus</span></code> is built on sockets (<code class="docutils literal notranslate"><span class="pre">Unix</span></code> domain and <code class="docutils literal notranslate"><span class="pre">TCP</span></code>) and
+serialized and deserialized using Google protobuf. <code class="docutils literal notranslate"><span class="pre">FDBus</span></code> supports the name of a string as
+the server address. The <code class="docutils literal notranslate"><span class="pre">name</span> <span class="pre">server</span></code> automatically assigns a <code class="docutils literal notranslate"><span class="pre">Unix</span></code> domain address and a
+<code class="docutils literal notranslate"><span class="pre">TCP</span></code> port number to the server, so that the addressing between the client and the server
+through the service name can be achieved .</p>
+<p><code class="docutils literal notranslate"><span class="pre">FDBus</span></code> aims to provide a connection-oriented, scalable, secure and reliable <code class="docutils literal notranslate"><span class="pre">IPC</span></code> mechanism
+between client-servers, and then develop into a middleware development framework for cross-platform
+(<code class="docutils literal notranslate"><span class="pre">Windows</span></code>, <code class="docutils literal notranslate"><span class="pre">QNX</span></code>, <code class="docutils literal notranslate"><span class="pre">Linux</span></code>), multi-threaded/multi-process middleware layers which working together.
+The <code class="docutils literal notranslate"><span class="pre">FDBus</span></code> development framework is suitable for interactive and complex distributed projects
+developed on customization systems, including:</p>
+<ul class="simple">
+<li>Linux-based vehicle <code class="docutils literal notranslate"><span class="pre">ECU</span></code>, including instrument cluster, entertainment host, TBox,
+domain controller connected via Ethernet</li>
+<li>Communication between multiple Guest OSs on <code class="docutils literal notranslate"><span class="pre">Hypervisors</span></code></li>
+<li>Provide cross-host <code class="docutils literal notranslate"><span class="pre">IPC</span></code> mechanism for Android system (currently does not support <code class="docutils literal notranslate"><span class="pre">Java</span> <span class="pre">API</span></code>)</li>
+<li>Small communication devices based on <code class="docutils literal notranslate"><span class="pre">Linux</span></code>, such as home routers</li>
+<li>Other Linux-based industrial equipment, smart equipment</li>
+<li>Automated test equipment based on <code class="docutils literal notranslate"><span class="pre">Windows</span></code> development</li>
+</ul>
+<dl class="docutils">
+<dt>You may get the open source of <code class="docutils literal notranslate"><span class="pre">FDBus</span></code> with Apache License on Github:</dt>
+<dd><a class="reference external" href="https://github.com/jeremyczhen/fdbus.git">https://github.com/jeremyczhen/fdbus.git</a></dd>
+</dl>
+</div>
+<div class="section" id="background">
+<h2>Background<a class="headerlink" href="#background" title="Permalink to this headline">¶</a></h2>
+<p>Unlike other cores, <code class="docutils literal notranslate"><span class="pre">Linux</span></code> has not had its own unique and easy-to-use <code class="docutils literal notranslate"><span class="pre">IPC</span></code> mechanism,
+while <code class="docutils literal notranslate"><span class="pre">Windows</span></code>, <code class="docutils literal notranslate"><span class="pre">Mac</span> <span class="pre">OS</span></code>, and <code class="docutils literal notranslate"><span class="pre">QNX</span></code> all have such a mechanism. Even Linux-based <code class="docutils literal notranslate"><span class="pre">Android</span></code>
+has developed a binder for <code class="docutils literal notranslate"><span class="pre">IPC</span></code>. The <code class="docutils literal notranslate"><span class="pre">Linux</span> <span class="pre">kernel</span></code> only provides some of the most basic
+components - socket, pipe, message queue, shared memory, and so on. This is also in line with
+the <code class="docutils literal notranslate"><span class="pre">Linux</span></code> philosophy which is that each tool only does one thing and does it well. But the
+reality is often very complicated. Just doing one thing is far from solving the problems encountered
+in reality, let alone product development and large commercial projects. For example,
+subscription-broadcasting is a basic communication requirement, but no basic component can satisfy it.</p>
+<p>Actually <code class="docutils literal notranslate"><span class="pre">Linux</span></code> has a powerful <code class="docutils literal notranslate"><span class="pre">IPC</span></code>: <code class="docutils literal notranslate"><span class="pre">D-Bus</span></code>. It has sophisticated method invocation mechanisms
+and event broadcast mechanisms. It also includes advanced features such as security policies and
+on-demand startup of services. But the biggest controversy about it is the performance: its performance is
+very low, due to the daemon relay, a request-reply needs to replicate ten times, four message verification,
+and four context switches. Therefore, it can only be used to handle control commands and message delivery
+with lower real-time requirements and smaller data volume, otherwise it will have to resort to the basic
+<code class="docutils literal notranslate"><span class="pre">IPC</span></code> framework. For this reason, someone wrote <code class="docutils literal notranslate"><span class="pre">D-Bus</span></code> into the kernel and generated <code class="docutils literal notranslate"><span class="pre">KDBus</span></code>.
+Although the performance is improved, the disadvantages are obvious. It can only be run on a single machine
+and does not support cross-host. In this case, Android’s Binder is also sufficient, and Binder has been
+accepted by the kernel. <code class="docutils literal notranslate"><span class="pre">KDBus</span></code> has not <cite>“turned positive”</cite> yet. In addition, whether it is <code class="docutils literal notranslate"><span class="pre">DBus</span></code> or
+<code class="docutils literal notranslate"><span class="pre">KDBus</span></code>, the provision is still the basic API, and there is still a big gap from the “middleware development
+framework.” However, there is an increasing demand from various industries, including the automotive industry,
+so that various <code class="docutils literal notranslate"><span class="pre">DBus</span></code> packages are produced: <code class="docutils literal notranslate"><span class="pre">Qt</span> <span class="pre">DBus</span></code>, <code class="docutils literal notranslate"><span class="pre">gDBus</span></code>, commonAPI, <code class="docutils literal notranslate"><span class="pre">DBus-C++</span></code>… But these
+packages are either subordinate to the big frame or lack of maintenance, in short, it is not friendly to use.</p>
+<p>In the automotive field where <code class="docutils literal notranslate"><span class="pre">Linux</span></code> and <code class="docutils literal notranslate"><span class="pre">Ethernet</span></code> are used more and more widely, the lack of suitable
+<code class="docutils literal notranslate"><span class="pre">IPC</span></code> has gradually become a prominent problem: the company’s original <code class="docutils literal notranslate"><span class="pre">IPC</span></code> mechanism is backward due to
+backward technology and obvious customization, and it has been unable to meet the requirements of distributed,
+high performance and security. However, it is unable to find a suitable <code class="docutils literal notranslate"><span class="pre">IPC</span></code> mechanism for the new platform,
+let alone a middleware development framework derived from the <code class="docutils literal notranslate"><span class="pre">IPC</span></code> mechanism. The application of <code class="docutils literal notranslate"><span class="pre">Ethernet</span></code> in
+vehicle have spawned <code class="docutils literal notranslate"><span class="pre">SOME/IP</span></code> (Scalable service-Oriented MiddlewarE over IP). <code class="docutils literal notranslate"><span class="pre">SOME/IP</span></code> is also a relatively
+complete <code class="docutils literal notranslate"><span class="pre">IPC</span></code> specification, even developed specifically for the automotive industry. But as the name implies, it is
+based on the IP layer and does not perform well on a single machine. And the open sources for <code class="docutils literal notranslate"><span class="pre">SOME</span> <span class="pre">/</span> <span class="pre">IP</span></code> implementation
+are also very few. The GENIVI organization contributed vsomeip, but the activity is very low. <code class="docutils literal notranslate"><span class="pre">GENIVI</span></code> itself is a
+loose organization with more participants but fewer developers. Unlike <code class="docutils literal notranslate"><span class="pre">DBus</span></code>, <code class="docutils literal notranslate"><span class="pre">SOME/IP</span></code> is built for vehicle and has
+a narrow range of applications. It is impossible to expect an active community to gather a group of professional
+programmers to maintain open source (this is probably why <code class="docutils literal notranslate"><span class="pre">GENIVI</span></code> is unsuccessful). Finally, it is very likely
+that you have to pay for closed source software.</p>
+<p><code class="docutils literal notranslate"><span class="pre">FDBus</span></code> was developed to solve the above problems and has the following characteristics:</p>
+<ul class="simple">
+<li><strong class="command">Distributed</strong>: Based on <code class="docutils literal notranslate"><span class="pre">TCP</span></code> sockets and Unix Domain sockets (<code class="docutils literal notranslate"><span class="pre">UDS</span></code>), it can be used for both local
+<code class="docutils literal notranslate"><span class="pre">IPC</span></code> and <code class="docutils literal notranslate"><span class="pre">IPC</span></code> between network hosts.</li>
+<li><strong class="command">Cross-platform</strong>: Currently verified on <code class="docutils literal notranslate"><span class="pre">Windows</span></code>, <code class="docutils literal notranslate"><span class="pre">Linux</span></code> and <code class="docutils literal notranslate"><span class="pre">QNX</span></code></li>
+<li><strong class="command">High performance</strong>: point-to-point direct communication, not forwarded through a central hub or broker</li>
+<li><strong class="command">Security</strong>: Ability to configure different levels of access for server method calls and event broadcasts.
+Only clients with high enough permissions can characterize methods and receive specific events.</li>
+<li><strong class="command">Service name resolution</strong>: The server address is identified by name, the service is registered by
+the <code class="docutils literal notranslate"><span class="pre">name</span> <span class="pre">server</span></code>, and the name is resolved, so that the server can be deployed anywhere on the network.</li>
+<li><dl class="first docutils">
+<dt>Support cross-platform middleware development framework, including the following components:</dt>
+<dd><ul class="first last">
+<li><ol class="first arabic">
+<li>Thread model</li>
+</ol>
+</li>
+<li><ol class="first arabic" start="2">
+<li>Event Loop</li>
+</ol>
+</li>
+<li><ol class="first arabic" start="3">
+<li>Inter-thread communication based on Job-Worker</li>
+</ol>
+</li>
+<li><ol class="first arabic" start="4">
+<li>Timer based on Event Loop</li>
+</ol>
+</li>
+<li><ol class="first arabic" start="5">
+<li>Watch based on Event Loop</li>
+</ol>
+</li>
+<li><ol class="first arabic" start="6">
+<li>Mutex</li>
+</ol>
+</li>
+<li><ol class="first arabic" start="7">
+<li>Semaphore</li>
+</ol>
+</li>
+<li><ol class="first arabic" start="8">
+<li>Socket</li>
+</ol>
+</li>
+<li><ol class="first arabic" start="9">
+<li>Notification</li>
+</ol>
+</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt><code class="docutils literal notranslate"><span class="pre">IPC</span></code> adopts Client-Server mode and supports the following communication modes:</dt>
+<dd><ul class="first last">
+<li><ol class="first arabic">
+<li>Synchronous request - reply with timeout</li>
+</ol>
+</li>
+<li><ol class="first arabic" start="2">
+<li>Asynchronous request - reply with timeout</li>
+</ol>
+</li>
+<li><ol class="first arabic" start="3">
+<li>Unanswered command request</li>
+</ol>
+</li>
+<li><ol class="first arabic" start="4">
+<li>Registration-release mode for multicast</li>
+</ol>
+</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">IPC</span></code> message implements serialization and deserialization by Protocol buffer. It supports IDL code generation
+which is efficient and simple. It also supports raw data format and is convenient for large data transmission</li>
+<li>Reliable heartbeat and reconnection mechanisms ensure that all parties remain connected regardless
+of network conditions, regardless of which service is back online or restarted</li>
+<li>C++ implementation, easy to develop and maintain</li>
+</ul>
+</div>
+<div class="section" id="mainstream-ipc-framework-comparison">
+<h2>Mainstream IPC framework comparison<a class="headerlink" href="#mainstream-ipc-framework-comparison" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="docutils">
+<colgroup>
+<col width="5%" />
+<col width="7%" />
+<col width="15%" />
+<col width="8%" />
+<col width="12%" />
+<col width="9%" />
+<col width="17%" />
+<col width="9%" />
+<col width="9%" />
+<col width="10%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">&#160;</th>
+<th class="head"><div class="first last line-block">
+<div class="line">Bottom</div>
+<div class="line">layer</div>
+</div>
+</th>
+<th class="head">performance</th>
+<th class="head"><div class="first last line-block">
+<div class="line">Sync</div>
+<div class="line">request</div>
+</div>
+</th>
+<th class="head"><div class="first last line-block">
+<div class="line">Asynchronous</div>
+<div class="line-block">
+<div class="line">request</div>
+</div>
+</div>
+</th>
+<th class="head"><div class="first last line-block">
+<div class="line">Request</div>
+<div class="line">timed out</div>
+</div>
+</th>
+<th class="head"><div class="first last line-block">
+<div class="line">Cross-host</div>
+</div>
+</th>
+<th class="head"><div class="first last line-block">
+<div class="line">Message</div>
+<div class="line">push</div>
+</div>
+</th>
+<th class="head"><div class="first last line-block">
+<div class="line">Cross-</div>
+<div class="line">platform</div>
+</div>
+</th>
+<th class="head"><div class="first last line-block">
+<div class="line">security</div>
+<div class="line">strategy</div>
+</div>
+</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>FDBus</td>
+<td>Socket</td>
+<td><div class="first last line-block">
+<div class="line">Point-to-point,</div>
+<div class="line">high</div>
+<div class="line">performance,</div>
+<div class="line">second only to</div>
+<div class="line">Binder</div>
+</div>
+</td>
+<td>YES</td>
+<td>YES</td>
+<td>YES</td>
+<td><div class="first last line-block">
+<div class="line">YES</div>
+<div class="line">with timeout</div>
+<div class="line">and heartbeat</div>
+<div class="line">to ensure reliable</div>
+<div class="line">connection</div>
+</div>
+</td>
+<td><div class="first last line-block">
+<div class="line">YES</div>
+<div class="line">with</div>
+<div class="line">simple</div>
+<div class="line">string</div>
+<div class="line">matching</div>
+</div>
+</td>
+<td><div class="first last line-block">
+<div class="line">Window</div>
+<div class="line">Linux</div>
+<div class="line">QNX</div>
+</div>
+</td>
+<td><div class="first last line-block">
+<div class="line">YES</div>
+<div class="line">Developing</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td>GDBus</td>
+<td>Socket</td>
+<td><div class="first last line-block">
+<div class="line">Turned by</div>
+<div class="line">daemon,</div>
+<div class="line">lower</div>
+<div class="line">performance</div>
+</div>
+</td>
+<td>YES</td>
+<td>YES</td>
+<td>YES</td>
+<td><div class="first last line-block">
+<div class="line">YES</div>
+<div class="line">but need</div>
+<div class="line">maintaining</div>
+<div class="line">reconnection when</div>
+<div class="line">network fails</div>
+</div>
+</td>
+<td><div class="first last line-block">
+<div class="line">YES</div>
+<div class="line">with</div>
+<div class="line">complex</div>
+<div class="line">matching</div>
+<div class="line"><br /></div>
+</div>
+</td>
+<td><div class="first last line-block">
+<div class="line">Window</div>
+<div class="line">Linux</div>
+<div class="line">QNX</div>
+</div>
+</td>
+<td><div class="first last line-block">
+<div class="line">YES</div>
+<div class="line">Developing</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td>Binder</td>
+<td><div class="first last line-block">
+<div class="line">Binder</div>
+<div class="line">driver</div>
+</div>
+</td>
+<td><div class="first last line-block">
+<div class="line">Direct copy,</div>
+<div class="line">highest</div>
+<div class="line">performance,</div>
+<div class="line"><br /></div>
+</div>
+</td>
+<td>YES</td>
+<td><div class="first last line-block">
+<div class="line">YES</div>
+<div class="line"><br /></div>
+<div class="line">but need</div>
+<div class="line">callback</div>
+<div class="line">package</div>
+</div>
+</td>
+<td><div class="first last line-block">
+<div class="line">YES</div>
+<div class="line">but need</div>
+<div class="line">to</div>
+<div class="line">increase</div>
+</div>
+</td>
+<td>NO</td>
+<td><div class="first last line-block">
+<div class="line">YES</div>
+<div class="line"><br /></div>
+<div class="line">but need</div>
+<div class="line">callback</div>
+<div class="line">package</div>
+</div>
+</td>
+<td><div class="first last line-block">
+<div class="line">Only</div>
+<div class="line">Linux,</div>
+<div class="line">requires</div>
+<div class="line">kernel</div>
+<div class="line">driver</div>
+</div>
+</td>
+<td>YES</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="middleware-model-based-on-fdbus">
+<h2>Middleware model based on FDBus<a class="headerlink" href="#middleware-model-based-on-fdbus" title="Permalink to this headline">¶</a></h2>
+<p>The following figure is an example of a middleware layer based on <code class="docutils literal notranslate"><span class="pre">FDBus</span></code> development:</p>
+<a class="reference internal image-reference" href="_images/1.png"><img alt="_images/1.png" src="_images/1.png" style="width: 600px;" /></a>
+<p>The middleware layer contains multiple processes, whether they are on the same host system or
+on different host systems. Each process can run multiple threads. <code class="docutils literal notranslate"><span class="pre">FDBus</span></code> runs a specific event
+loop on a thread basis, enhancing the generic thread to a worker thread capable of executing jobs,
+timers, and watches. The two communication parties (client and server) of <code class="docutils literal notranslate"><span class="pre">FDBus</span></code> are collectively
+referred to as endpoint. Endpoints can be deployed on different workers; multiple endpoints can also
+share the same worker. “Endpoint deployed on the worker” means that the event processing of the endpoint
+is executed on the worker. For example, the server processes the client request on the specified
+worker; the client processes the asynchronous reply and the broadcast event of the server on the
+specified worker. Middleware developers can use a worker to handle multiple endpoint events
+according to the actual situation, avoiding consuming too many threads, and also avoiding the
+“concurrency disaster” caused by multithreading. Developers can also use multiple workers to serve
+one endpoint. For example, endpoint can create worker threads to complete time-consuming
+file downloads, video codecs, peripheral IO operations, etc..</p>
+<p>Multi-threaded collaborative work requires that messages and data could be transferred between threads.
+For example, the endpoint should be notified for subsequent processing if the file is downloaded successfully.
+Because the same address space can be accessed in the process, the best communication carrier is
+the object which can either carry the data or specify the way of data processing. Job is the object that
+<code class="docutils literal notranslate"><span class="pre">FDBus</span></code> transfers between threads, <code class="docutils literal notranslate"><span class="pre">FDBus</span></code> realizes inter-process communication through the transfer
+and execution of jobs between threads.</p>
+<p>A more important feature of <code class="docutils literal notranslate"><span class="pre">FDBus</span></code> is interprocess communication (<code class="docutils literal notranslate"><span class="pre">IPC</span></code>). Objects cannot be
+directly passed between processes. Processes can only interact in the form of messages. Further more,
+messages need to be serialized during transmission and deserialized after receiving. Each <code class="docutils literal notranslate"><span class="pre">IPC</span></code>
+mechanism, including <code class="docutils literal notranslate"><span class="pre">Binder</span></code>, <code class="docutils literal notranslate"><span class="pre">SOME/IP</span></code>, and <code class="docutils literal notranslate"><span class="pre">DBus</span></code>, has its own serialization method.
+The quality of serialization directly affects communication efficiency, load, support for data
+structures, and ease of use. <code class="docutils literal notranslate"><span class="pre">FDBus</span></code> does not have its own serialization method, just uses google
+protocol buffer directly which is easy to use, full-featured, and supports idl automatic code generation.
+Data is communicated between processes using sockets, including Unix Domain Sockets (<code class="docutils literal notranslate"><span class="pre">UDS</span></code>) and
+<code class="docutils literal notranslate"><span class="pre">TCP</span></code> sockets. The system will automatically choose which type to be used according to the deployment
+of Client and Server: <code class="docutils literal notranslate"><span class="pre">UDS</span></code> is used if inside the same host, otherwise <code class="docutils literal notranslate"><span class="pre">TCP</span></code> socket is used.
+For <code class="docutils literal notranslate"><span class="pre">Windows</span></code>, since <code class="docutils literal notranslate"><span class="pre">UDS</span></code> is not supported, <code class="docutils literal notranslate"><span class="pre">TCP</span></code> sockets are used for all.</p>
+</div>
+<div class="section" id="fdbus-addressing-and-networking">
+<h2>FDBus addressing and networking<a class="headerlink" href="#fdbus-addressing-and-networking" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="server-address">
+<h3>Server address<a class="headerlink" href="#server-address" title="Permalink to this headline">¶</a></h3>
+<p>The server address is the identifier of the server in the network. Through this identifier,
+the client can find the specified server and establish communication with it. As mentioned
+earlier, FDBus supports <code class="docutils literal notranslate"><span class="pre">UDS</span></code> and <code class="docutils literal notranslate"><span class="pre">TCP</span></code> sockets, each with its own naming method and namespace.
+For unification, <code class="docutils literal notranslate"><span class="pre">FDBus</span></code> uses the following rules to define the server address:</p>
+<ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">UDS</span></code>: <a class="reference external" href="file://socket">file://socket</a> filename</li>
+<li><code class="docutils literal notranslate"><span class="pre">TCP</span></code> socket: <a class="reference external" href="tcp://ip">tcp://ip</a> address: port number</li>
+</ul>
+<p>Different from the socket server in the general sense, the <code class="docutils literal notranslate"><span class="pre">FDBus</span></code> server can bind multiple addresses
+at the same time, and each address can accept the connection of the client. Once connected, each address
+provides the same service, so the client can choose any address to establish a connection. The following
+figure is a schematic diagram of the <code class="docutils literal notranslate"><span class="pre">FDBus</span></code> server address binding:</p>
+<a class="reference internal image-reference" href="_images/2.png"><img alt="_images/2.png" src="_images/2.png" style="width: 600px;" /></a>
+<p>In the figure above, the server is bound to a <code class="docutils literal notranslate"><span class="pre">UDS</span></code> address: <code class="docutils literal notranslate"><span class="pre">file:///tmp/fdb-ipc1</span></code>. The client on the
+same host can use this address to initiate a connection. Of course, it can also connect to any other address,
+but undoubtedly the most efficient one is <code class="docutils literal notranslate"><span class="pre">UDS</span></code>. And <code class="docutils literal notranslate"><span class="pre">UDS</span></code> supports peer credentials, and thus support
+security policies. As the host has multiple network ports, the server can also bind one address
+(port number) to each network port: <code class="docutils literal notranslate"><span class="pre">tcp://192.168.1.2:60004</span></code> and <code class="docutils literal notranslate"><span class="pre">tcp://192.168.0.1:60004</span></code>. Each address
+is used to connect to the client of the corresponding network segment.</p>
+</div>
+<div class="section" id="server-naming-and-address-assignment">
+<h3>Server naming and address assignment<a class="headerlink" href="#server-naming-and-address-assignment" title="Permalink to this headline">¶</a></h3>
+<p>It is inconvenient and not intuitive to use the above address to locate the server. The address will
+change with the networking mode and cannot be deployed flexibly. For this reason, <code class="docutils literal notranslate"><span class="pre">FDBus</span></code> has added an
+addressing mode: server name addressing. Each server can have its own name. A service called <code class="docutils literal notranslate"><span class="pre">name</span> <span class="pre">server</span></code>,
+is run to assign addresses to the server, manage the mapping between server names and addresses, parse
+the server name, and issue the server address. The <code class="docutils literal notranslate"><span class="pre">name</span> <span class="pre">server</span></code> is a bit like the <code class="docutils literal notranslate"><span class="pre">DNS</span></code> on the internet.
+To support server name addressing, a format is added to the two URLs as the name address, as follows:</p>
+<ul class="simple">
+<li>svc://servername</li>
+</ul>
+<p>The name address is a virtual address. No matter where the server is located, as long as its name and address
+are unchanged, the client can establish contact with it through this address. If the server calls <code class="docutils literal notranslate"><span class="pre">bind()</span></code> to bind
+the name address (the address starting with svc:// ), the <code class="docutils literal notranslate"><span class="pre">name</span> <span class="pre">server</span></code> will assign the actual address (the address
+starting with <a class="reference external" href="tcp://">tcp://</a> or <a class="reference external" href="file://">file://</a> ) to it and register the name and address to the mapping table. If the client connects
+to the name address, the <code class="docutils literal notranslate"><span class="pre">name</span> <span class="pre">server</span></code> will look up the actual address of the server according to the name and
+select the most appropriate actual address to publish to the client. The client establishes a point-to-point direct
+connection with the server through this address. The following figure shows the process of establishing a connection
+between the client and the server using the name address with the help of the <code class="docutils literal notranslate"><span class="pre">name</span> <span class="pre">server</span></code>:</p>
+<a class="reference internal image-reference" href="_images/3.png"><img alt="_images/3.png" src="_images/3.png" style="width: 600px;" /></a>
+<p>First, the client calls connect(“svc://medisServer”) to establish a connection with the server named mediaServer.
+Since the name address is used, <code class="docutils literal notranslate"><span class="pre">FDBus</span></code> will ask the <code class="docutils literal notranslate"><span class="pre">name</span> <span class="pre">server</span></code> for the actual address of the mediaServer.
+But now mediaServer is not online yet, so the name cannot be resolved, just subscribe to the online
+notification of the service. Soon after, the server calls bind(“svc://mediaServer”) to be online.
+Since the name address is used, the request will also be sent to the <code class="docutils literal notranslate"><span class="pre">name</span> <span class="pre">server</span></code>. The <code class="docutils literal notranslate"><span class="pre">name</span> <span class="pre">server</span></code>
+registers its name, assigns <code class="docutils literal notranslate"><span class="pre">UDS</span></code> and <code class="docutils literal notranslate"><span class="pre">TCP</span></code> addresses, and returns them to the server. The server is
+bound to each actual address, and the <code class="docutils literal notranslate"><span class="pre">name</span> <span class="pre">server</span></code> is notified after success. The <code class="docutils literal notranslate"><span class="pre">name</span> <span class="pre">server</span></code>
+issues the server online message and the server address to the entire system: the <code class="docutils literal notranslate"><span class="pre">UDS</span></code> address is
+broadcast to the local client, and the <code class="docutils literal notranslate"><span class="pre">TCP</span></code> address is broadcast to the clients on other nodes.
+The client establishes a connection with the server using the received address, and both the client and
+the server can receive the event notification of onOnline().</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">name</span> <span class="pre">server</span></code> uses the following rules to assign a server address:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="23%" />
+<col width="49%" />
+<col width="28%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Server</th>
+<th class="head">TCP Address</th>
+<th class="head">UDS Address</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>host server</td>
+<td>port No. 6100</td>
+<td>/tmp/fdb-ns</td>
+</tr>
+<tr class="row-odd"><td>name server</td>
+<td>port No. 6101</td>
+<td>/tmp/fdb-ns</td>
+</tr>
+<tr class="row-even"><td>user servers</td>
+<td><div class="first last line-block">
+<div class="line">Port 61002 – Port 65535</div>
+<div class="line">or</div>
+<div class="line">Automatic system allocation</div>
+</div>
+</td>
+<td><div class="first last line-block">
+<div class="line">/tmp/fdb-ipc0,</div>
+<div class="line">/tmp/fdb-ipc1,</div>
+<div class="line">…</div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="multi-host-networking">
+<h3>Multi-host networking<a class="headerlink" href="#multi-host-networking" title="Permalink to this headline">¶</a></h3>
+<p>Since the address of the <code class="docutils literal notranslate"><span class="pre">name</span> <span class="pre">server</span></code> is fixed, the endpoint will automatically connect to the <code class="docutils literal notranslate"><span class="pre">name</span> <span class="pre">server</span></code>
+registration (server) or resolution (client) name after the endpoint is started. If there are multiple hosts,
+each running their own <code class="docutils literal notranslate"><span class="pre">name</span> <span class="pre">server</span></code>, responsible for their respective name services, then these hosts
+become isolated islands and cannot be connected to each other through service names such as svc://server_name.
+Of course, the client can bypass the <code class="docutils literal notranslate"><span class="pre">name</span> <span class="pre">server</span></code> and directly connect to the server with the actual
+address, but this cannot be flexibly deployed and networked. In order to support name resolution across
+networks, a service is required to manage all hosts in the system, and the host information is synchronized
+to all <code class="docutils literal notranslate"><span class="pre">name</span> <span class="pre">servers</span></code>. These <code class="docutils literal notranslate"><span class="pre">name</span> <span class="pre">servers</span></code> can establish connections and work together to complete the name
+service within the entire network. This service is the <code class="docutils literal notranslate"><span class="pre">host</span> <span class="pre">server</span></code>.</p>
+<p>The working principle of the <code class="docutils literal notranslate"><span class="pre">host</span> <span class="pre">server</span></code> is: the entire network runs a <code class="docutils literal notranslate"><span class="pre">host</span> <span class="pre">server</span></code>, which can be located
+on any host that everyone can access. All host name servers are connected to the <code class="docutils literal notranslate"><span class="pre">host</span> <span class="pre">server</span></code>, registering
+their own host. The <code class="docutils literal notranslate"><span class="pre">host</span> <span class="pre">server</span></code> maintains a list of hosts containing the IP addresses of the hosts and
+synchronizes the tables to all <code class="docutils literal notranslate"><span class="pre">name</span> <span class="pre">servers</span></code> on the network. The <code class="docutils literal notranslate"><span class="pre">name</span> <span class="pre">server</span></code> establishes a connection
+with the <code class="docutils literal notranslate"><span class="pre">name</span> <span class="pre">server</span></code> on all hosts in the network according to the table.</p>
+<p>Once the <code class="docutils literal notranslate"><span class="pre">name</span> <span class="pre">servers</span></code> on all hosts are connected in pairs, the service name resolution and service
+online notification can be completed through a set of internal protocols. For example, when a client on
+a host requests the local <code class="docutils literal notranslate"><span class="pre">name</span> <span class="pre">server</span></code> to resolve the address corresponding to the service name, the local
+<code class="docutils literal notranslate"><span class="pre">name</span> <span class="pre">server</span></code> can broadcast the request to all connected <code class="docutils literal notranslate"><span class="pre">name</span> <span class="pre">servers</span></code> to find services in the entire
+network. The following is an example diagram of the entire system networking:</p>
+<a class="reference internal image-reference" href="_images/4.png"><img alt="_images/4.png" src="_images/4.png" style="width: 600px;" /></a>
+<p>In the above figure, a star connection is established between the <code class="docutils literal notranslate"><span class="pre">name</span> <span class="pre">server</span></code> and the <code class="docutils literal notranslate"><span class="pre">host</span> <span class="pre">server</span></code>,
+and the <code class="docutils literal notranslate"><span class="pre">name</span> <span class="pre">server</span></code> and the <code class="docutils literal notranslate"><span class="pre">name</span> <span class="pre">server</span></code> are connected one by one to form a network.
+In this system, the main tasks of the <code class="docutils literal notranslate"><span class="pre">name</span> <span class="pre">server</span></code> and <code class="docutils literal notranslate"><span class="pre">host</span> <span class="pre">server</span></code> are:</p>
+<ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">Name</span> <span class="pre">server</span></code> connects to the <code class="docutils literal notranslate"><span class="pre">host</span> <span class="pre">server</span></code>, and the host is registered to the <code class="docutils literal notranslate"><span class="pre">host</span> <span class="pre">server</span></code>.</li>
+<li>The <code class="docutils literal notranslate"><span class="pre">host</span> <span class="pre">server</span></code> collects all host information to form a host address table.</li>
+<li>The <code class="docutils literal notranslate"><span class="pre">host</span> <span class="pre">server</span></code> broadcasts the host address table to all name servers.</li>
+<li><code class="docutils literal notranslate"><span class="pre">Name</span> <span class="pre">server</span></code> gets the address of the name servers on the other hosts through the table and
+establish the connection with it.</li>
+<li>All servers are connected to the local <code class="docutils literal notranslate"><span class="pre">name</span> <span class="pre">server</span></code> and register the service name with them.
+The local <code class="docutils literal notranslate"><span class="pre">name</span> <span class="pre">server</span></code> broadcasts the newly registered service to the local client and all
+other <code class="docutils literal notranslate"><span class="pre">name</span> <span class="pre">servers</span></code> in the network.</li>
+<li>After the other <code class="docutils literal notranslate"><span class="pre">name</span> <span class="pre">server</span></code> receives the broadcast, it also makes a broadcast locally and
+notifies all clients. In this way, the service online message is spread to the entire network.</li>
+<li>All clients are connected to the local <code class="docutils literal notranslate"><span class="pre">name</span> <span class="pre">server</span></code> and apply for service name resolution.
+The local <code class="docutils literal notranslate"><span class="pre">name</span> <span class="pre">server</span></code> searches its own server address mapping table and sends the application
+to all other <code class="docutils literal notranslate"><span class="pre">name</span> <span class="pre">servers</span></code>.</li>
+<li>After receiving the application, other <code class="docutils literal notranslate"><span class="pre">name</span> <span class="pre">servers</span></code> search their respective server address
+mapping tables and return the result to the <code class="docutils literal notranslate"><span class="pre">name</span> <span class="pre">server</span></code> that initiated the application.</li>
+<li>The <code class="docutils literal notranslate"><span class="pre">name</span> <span class="pre">server</span></code> forwards the received return result to the client that initiated the application,
+and the client establishes a direct connection with the service using the actual address in the result.
+In this way, you can find all services on all hosts.</li>
+</ul>
+<p>As can be seen from the above figure, once the connection is established between the client and the server,
+all communication is completed through this connection without forwarding through the intermediate link.</p>
+</div>
+<div class="section" id="uniqueness-of-the-service-name">
+<h3>Uniqueness of the service name<a class="headerlink" href="#uniqueness-of-the-service-name" title="Permalink to this headline">¶</a></h3>
+<p>Since each host has its own <code class="docutils literal notranslate"><span class="pre">name</span> <span class="pre">server</span></code>, the service cannot be renamed inside the host, but it can be
+renamed on different hosts. In this case, when the client requests name resolution, it may receive feedback
+from different hosts. The client can customize the connection policy: always connect to the new server,
+only connect to the first server, or only connect to the specified server.</p>
+</div>
+<div class="section" id="heartbeat-detection-reconnection-and-online-offline-detection">
+<h3>Heartbeat detection, reconnection and online, offline detection<a class="headerlink" href="#heartbeat-detection-reconnection-and-online-offline-detection" title="Permalink to this headline">¶</a></h3>
+<p>In order to make the whole system run reliably and ensure that any service can be gracefully restarted
+(the entire system still works normally after restarting), <code class="docutils literal notranslate"><span class="pre">FDBus</span></code> has perfect heartbeat detection and
+online and offline detection mechanisms:</p>
+<ul class="simple">
+<li>There is a reconnection mechanism between endpoints and <code class="docutils literal notranslate"><span class="pre">name</span> <span class="pre">server</span></code> to ensure that the endpoint
+can always establish a connection with the <code class="docutils literal notranslate"><span class="pre">name</span> <span class="pre">server</span></code> after restarting.</li>
+<li>There is heartbeat detection between the <code class="docutils literal notranslate"><span class="pre">name</span> <span class="pre">server</span></code> and the <code class="docutils literal notranslate"><span class="pre">host</span> <span class="pre">server</span></code>. Once the heartbeat
+disappears, the <code class="docutils literal notranslate"><span class="pre">name</span> <span class="pre">server</span></code> will try to reconnect with the <code class="docutils literal notranslate"><span class="pre">host</span> <span class="pre">server</span></code> to ensure the reliability of
+the connection between the <code class="docutils literal notranslate"><span class="pre">name</span> <span class="pre">server</span></code> and the <code class="docutils literal notranslate"><span class="pre">host</span> <span class="pre">server</span></code>.</li>
+<li>The connection between the <code class="docutils literal notranslate"><span class="pre">name</span> <span class="pre">server</span></code> and the <code class="docutils literal notranslate"><span class="pre">name</span> <span class="pre">server</span></code> is established by the <code class="docutils literal notranslate"><span class="pre">host</span> <span class="pre">server</span></code>:
+When the <code class="docutils literal notranslate"><span class="pre">name</span> <span class="pre">server</span></code> goes online, the <code class="docutils literal notranslate"><span class="pre">host</span> <span class="pre">server</span></code> notifies all other <code class="docutils literal notranslate"><span class="pre">name</span> <span class="pre">servers</span></code> to establish a
+connection with it, and also informs the <code class="docutils literal notranslate"><span class="pre">name</span> <span class="pre">server</span></code> to establish a connection with all other
+<code class="docutils literal notranslate"><span class="pre">name</span> <span class="pre">servers</span></code>.</li>
+<li>The connection between the client and the server is established by the <code class="docutils literal notranslate"><span class="pre">name</span> <span class="pre">server</span></code>: When the server
+goes online, the <code class="docutils literal notranslate"><span class="pre">name</span> <span class="pre">server</span></code> notifies the client to establish a connection with it.</li>
+</ul>
+</div>
+</div>
+<div class="section" id="security">
+<h2>Security<a class="headerlink" href="#security" title="Permalink to this headline">¶</a></h2>
+<p>As systems become more complex and open, security has become the focus of system architecture design.
+An open system means that there may be intruders, and once an intruder accesses a resource that should
+not be accessed, it may cause information leakage or destruction. On the other hand, the security of a
+system is based on the chain of trust, and only by satisfying the necessary security foundation can build
+its own security capabilities. For <code class="docutils literal notranslate"><span class="pre">FDBus</span></code>, there are two prerequisites:</p>
+<div class="line-block">
+<div class="line">The most basic premise is the integrity of the <code class="docutils literal notranslate"><span class="pre">FDBus</span></code> itself: the <code class="docutils literal notranslate"><span class="pre">FDBus</span></code> library running in the
+system, the <code class="docutils literal notranslate"><span class="pre">name</span> <span class="pre">server</span></code>, and the <code class="docutils literal notranslate"><span class="pre">host</span> <span class="pre">server</span></code> are all legal and have not been tampered with or replaced,
+otherwise security cannot be guaranteed anyway. This is ensured by the operating system with rights
+management, secure boot, <code class="docutils literal notranslate"><span class="pre">DM-verity/FS-verity</span></code>, security upgrade, SELinux and other mechanisms.</div>
+</div>
+<div class="line-block">
+<div class="line">Secondly, on the network, the <code class="docutils literal notranslate"><span class="pre">FDBus</span></code> message is delivered in plain text. Once someone illegally
+listens to the network message, it may cause information leakage and security loopholes. Therefore,
+another premise to discuss the security of <code class="docutils literal notranslate"><span class="pre">FDBus</span></code> is that the intruder cannot intercept the network
+packet and obtain the data transmitted by the <code class="docutils literal notranslate"><span class="pre">FDBus</span></code> on the link. Key data such as tokens will be
+encrypted in the future, but it has not been implemented yet.</div>
+</div>
+<p>Based on these assumptions, the attacks faced by <code class="docutils literal notranslate"><span class="pre">FDBus</span></code> mainly come from three aspects:</p>
+<div class="line-block">
+<div class="line">1) An illegal host connects to the <code class="docutils literal notranslate"><span class="pre">FDBus</span></code> bus and runs an illegal client to access the server on other hosts;</div>
+<div class="line">2) Runs an illegal client on a legitimate host to access the <code class="docutils literal notranslate"><span class="pre">FDBus</span></code> server in the host</div>
+<div class="line">3) A legal client is running on a legal host, but tries to get data without permission or
+perform an operation without permission.</div>
+</div>
+<p>Based on the above attacks, <code class="docutils literal notranslate"><span class="pre">FDBus</span></code> ensures the safe operation of the system from the following aspects:</p>
+<ul class="simple">
+<li><strong>Authentication of the host node</strong>: All hosts joining the <code class="docutils literal notranslate"><span class="pre">FDBus</span></code> are divided into different security levels.</li>
+<li><strong>Authentication of service access</strong>: All clients are divided into different security levels</li>
+<li><strong>Access restrictions</strong>: The server’s method calls and event broadcasts are divided into different security levels,
+so that the client can call the method that matches the server security level and the event broadcast that
+matches the registration.</li>
+</ul>
+<div class="section" id="host-node-authentication">
+<h3>Host node authentication<a class="headerlink" href="#host-node-authentication" title="Permalink to this headline">¶</a></h3>
+<p>A host must establish a connection with the <code class="docutils literal notranslate"><span class="pre">host</span> <span class="pre">server</span></code> if it wants to join the <code class="docutils literal notranslate"><span class="pre">FDBus</span></code>. The <code class="docutils literal notranslate"><span class="pre">host</span> <span class="pre">server</span></code>
+can authenticate the host by checking the host’s IP address or MAC address, and can also determine the
+validity of the host through the public-private key pair. For a legitimate host, the <code class="docutils literal notranslate"><span class="pre">host</span> <span class="pre">server</span></code> will
+issue an “<code class="docutils literal notranslate"><span class="pre">ID</span> <span class="pre">card</span></code>” for accessing other hosts. After holding the <code class="docutils literal notranslate"><span class="pre">ID</span> <span class="pre">card</span></code>, the hosts can identify each
+other and give each other access rights.</p>
+<p>“<code class="docutils literal notranslate"><span class="pre">ID</span> <span class="pre">card</span></code>” is implemented by token. When the <code class="docutils literal notranslate"><span class="pre">name</span> <span class="pre">server</span></code> on the host initiates a connection,
+the <code class="docutils literal notranslate"><span class="pre">host</span> <span class="pre">server</span></code> will assign multiple tokens to it, and each token corresponds to a security level. The following
+table shows the token assignments for each host in a system:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="10%" />
+<col width="23%" />
+<col width="23%" />
+<col width="23%" />
+<col width="23%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">&#160;</th>
+<th class="head">Security Level 0</th>
+<th class="head">Security Level 1</th>
+<th class="head">Security Level 2</th>
+<th class="head">Security Level 3</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>host 1</td>
+<td>token10</td>
+<td>token11</td>
+<td>token12</td>
+<td>token13</td>
+</tr>
+<tr class="row-odd"><td>host 2</td>
+<td>token20</td>
+<td>token21</td>
+<td>token22</td>
+<td>token23</td>
+</tr>
+<tr class="row-even"><td>host 3</td>
+<td>token30</td>
+<td>token31</td>
+<td>token32</td>
+<td>token33</td>
+</tr>
+</tbody>
+</table>
+<p>There are four security levels in the table. For host 1, the tokens corresponding to each security level
+are token10, token11, token12, and token13. For other hosts, and so on. When the <code class="docutils literal notranslate"><span class="pre">name</span> <span class="pre">server</span></code> of the host 2
+is connected to the <code class="docutils literal notranslate"><span class="pre">name</span> <span class="pre">server</span></code> of the host 1, it needs to hold one of the four tokens of the host 1.
+For example, host 2 uses token 11 to connect to host 1, then in the eyes of host 1, the security level
+of host 2 is 1; if token13 is used, the security level of host 2 is 3, and so on. The number of security
+levels can be configured according to the project.</p>
+<p>The security level of the host is specified after the <code class="docutils literal notranslate"><span class="pre">host</span> <span class="pre">server</span></code> identifies and authenticates the host.
+As mentioned above, the <code class="docutils literal notranslate"><span class="pre">host</span> <span class="pre">server</span></code> can identify the host identity according to the host’s MAC address or
+other means, and then use the following configuration table to publish the tokens used by the hosts to
+access each other:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="46%" />
+<col width="18%" />
+<col width="18%" />
+<col width="18%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>&#160;</td>
+<td>host 1</td>
+<td>host 2</td>
+<td>host 3</td>
+</tr>
+<tr class="row-even"><td>host 1 (MAC address1)</td>
+<td>NA</td>
+<td>token22</td>
+<td>token31</td>
+</tr>
+<tr class="row-odd"><td>host 2 (MAC address2)</td>
+<td>token13</td>
+<td>NA</td>
+<td>token33</td>
+</tr>
+<tr class="row-even"><td>host 3 (MAC address3)</td>
+<td>token12</td>
+<td>token23</td>
+<td>NA</td>
+</tr>
+</tbody>
+</table>
+<p>For example:</p>
+<div class="line-block">
+<div class="line">1) Host 1 connects to host 2 using token22, that is, for host 2, host 1 has a security level of 2;</div>
+<div class="line">2) when host 1 connects to host 3, token31 is used, that is, for host 3, The security level of host 1 is level 1.</div>
+</div>
+<p>And so on. For hosts that are not in the table, the <code class="docutils literal notranslate"><span class="pre">host</span> <span class="pre">server</span></code> will not reject the connection for the sake of
+openness, but will not issue a token for it. For hosts that do not have a token, the security level is considered
+to be -1 and there is no level.</p>
+</div>
+<div class="section" id="service-access-authentication">
+<h3>Service access authentication<a class="headerlink" href="#service-access-authentication" title="Permalink to this headline">¶</a></h3>
+<p>Just as the <code class="docutils literal notranslate"><span class="pre">host</span> <span class="pre">server</span></code> is responsible for host authentication, the <code class="docutils literal notranslate"><span class="pre">name</span> <span class="pre">server</span></code> is responsible for the
+authentication of the service access, and also uses the certification authentication + token issuing method.
+When the server registers the service name with the <code class="docutils literal notranslate"><span class="pre">name</span> <span class="pre">server</span></code>, the <code class="docutils literal notranslate"><span class="pre">name</span> <span class="pre">server</span></code> allocates multiple
+tokens at the same time as the address is assigned, and each token corresponds to a security level, as shown
+in the following table:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="12%" />
+<col width="22%" />
+<col width="22%" />
+<col width="22%" />
+<col width="22%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>&#160;</td>
+<td>Security Level 0</td>
+<td>Security Level 1</td>
+<td>Security Level 2</td>
+<td>Security Level 3</td>
+</tr>
+<tr class="row-even"><td>server 1</td>
+<td>token10</td>
+<td>token11</td>
+<td>token12</td>
+<td>token13</td>
+</tr>
+<tr class="row-odd"><td>server 2</td>
+<td>token20</td>
+<td>token21</td>
+<td>token22</td>
+<td>token23</td>
+</tr>
+<tr class="row-even"><td>server 3</td>
+<td>token30</td>
+<td>token31</td>
+<td>token32</td>
+<td>token33</td>
+</tr>
+</tbody>
+</table>
+<p>There are four security levels in the table. For server1, the tokens corresponding to each security level
+are token10, token11, token12, and token13. For other servers, and so on. When the client connects to server1,
+it needs to hold one of the four tokens of server1. For example, if the client uses token11 to connect to
+server1, then in the eyes of server1, the client’s security level is 1. If token13 is used, then the client’s
+security level is 3, and so on. The number of security levels can be configured as appropriate.</p>
+<p>The security level of the host is specified after the <code class="docutils literal notranslate"><span class="pre">host</span> <span class="pre">server</span></code> identifies and authenticates the host.
+When the client connects to the <code class="docutils literal notranslate"><span class="pre">name</span> <span class="pre">server</span></code> through the UDS, the UDS will also send the client’s
+credentials to the <code class="docutils literal notranslate"><span class="pre">name</span> <span class="pre">server</span></code>, including the client’s uid and guid. Windows does not support <code class="docutils literal notranslate"><span class="pre">UDS</span></code>, so
+it doesn’t support service access authentication. For <code class="docutils literal notranslate"><span class="pre">QNX</span></code>, although <code class="docutils literal notranslate"><span class="pre">UDS</span></code> is supported, service access
+authentication is not supported because the <code class="docutils literal notranslate"><span class="pre">SO_PEERCRED</span></code> option is not supported. So currently only Linux
+can support, and the credentials are attached by the operating system which is trustworthy, the client can not
+fake an identity. According to uid and guid, the <code class="docutils literal notranslate"><span class="pre">name</span> <span class="pre">server</span></code> can identify the identity of the client, and
+publish the token used to access other servers through the following configuration table:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="38%" />
+<col width="16%" />
+<col width="16%" />
+<col width="16%" />
+<col width="16%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>&#160;</td>
+<td>server1</td>
+<td>server2</td>
+<td>server3</td>
+<td>server4</td>
+</tr>
+<tr class="row-even"><td>client1 (uid1:guid1)</td>
+<td>token12</td>
+<td>token22</td>
+<td>token31</td>
+<td>token43</td>
+</tr>
+<tr class="row-odd"><td>client2 (uid2:guid2)</td>
+<td>token13</td>
+<td>token21</td>
+<td>token33</td>
+<td>token43</td>
+</tr>
+<tr class="row-even"><td>client3 (uid3:guid3)</td>
+<td>token12</td>
+<td>token23</td>
+<td>token33</td>
+<td>token41</td>
+</tr>
+</tbody>
+</table>
+<p>For example:</p>
+<div class="line-block">
+<div class="line">1) Client1 connects to server1 using token12, that is, for server1, client1 has a security level of 2;</div>
+<div class="line">2) Client1 connects to server2 using token22, that is, for server2, client1 has a security level of 2 .</div>
+</div>
+<p>And so on. For clients that are not in the table, the <code class="docutils literal notranslate"><span class="pre">name</span> <span class="pre">server</span></code> will not reject the connection for
+the sake of openness,but will not issue tokens for it. For clients without a token, the security level is
+considered to be -1, the lowest level.</p>
+<p>When the security policy is enabled, the process of establishing a connection between the client and the
+server increases the client authentication and token issuance process, as shown in the following figure:</p>
+<a class="reference internal image-reference" href="_images/5.png"><img alt="_images/5.png" src="_images/5.png" style="width: 600px;" /></a>
+<p>Compared with the previous timing, in the above figure, the <code class="docutils literal notranslate"><span class="pre">name</span> <span class="pre">server</span></code> issues tokens to the server
+and the client respectively: all the security level tokens T0-T3 are issued to the server; only the token
+matching the security level is issued to the client. When the client connects to the server, it will also
+send the token to the server. The server finds that the received token is consistent with T1 by comparison,
+so that the client’s security level is 1. Suppose a malicious client also connects to the same server:
+Since the <code class="docutils literal notranslate"><span class="pre">name</span> <span class="pre">server</span></code> can not recognize its <code class="docutils literal notranslate"><span class="pre">UID</span></code>, it will not be assigned a token. When the client
+trying to connect to the server, the server sets its security level to -1 because the token cannot be given,
+that is, no security level, . In this case, by configuring the server, the client can only be allowed to access
+to a limited API, so that the access control is realized.</p>
+</div>
+<div class="section" id="security-level-and-access-rights">
+<h3>Security level and access rights<a class="headerlink" href="#security-level-and-access-rights" title="Permalink to this headline">¶</a></h3>
+<p>When determining the security level of the client, the server needs to integrate the security level of
+the client itself and the security level of the host where the client is located: the highest security
+level of the client does not exceed the security level of the host where it resides. With a security
+level, the server can define different levels of access: at which levels, which methods can be called,
+and which broadcast messages are monitored. The following figure shows the partitioning of a server’s
+access rights:</p>
+<a class="reference internal image-reference" href="_images/6.png"><img alt="_images/6.png" src="_images/6.png" style="width: 600px;" /></a>
+<p>Each server can define access rights corresponding to different security levels through the configuration
+file. The specific method is to segment the method ID and the notification ID, and the IDs falling in
+different segments correspond to different security levels. For the method call, if the security level
+of the client does not reach the required level, the server will refuse to execute; for the message
+notification, if the client does not have the permission, the message of the high security level cannot
+be registered, and thus the change notification of the message will not be received.</p>
+</div>
+<div class="section" id="security-policy-configuration-file">
+<h3>Security policy configuration file<a class="headerlink" href="#security-policy-configuration-file" title="Permalink to this headline">¶</a></h3>
+<p>The security policy file is located under <code class="docutils literal notranslate"><span class="pre">/etc/fdbus</span></code> by default.</p>
+<div class="section" id="parameter-configuration-file-etc-fdbus-fdbus-fdb">
+<h4>Parameter configuration file /etc/fdbus/fdbus.fdb<a class="headerlink" href="#parameter-configuration-file-etc-fdbus-fdbus-fdb" title="Permalink to this headline">¶</a></h4>
+<p>This file configures the overall security parameters, including the following fields:</p>
+<ul class="simple">
+<li><strong>number_of_secure_levels</strong>: number type, how many security levels are configured</li>
+<li><strong>token_length</strong>: number type, configured for the length of the token in bytes.</li>
+</ul>
+</div>
+<div class="section" id="host-configuration-file-etc-fdbus-host-fdb">
+<h4>Host configuration file /etc/fdbus/host.fdb<a class="headerlink" href="#host-configuration-file-etc-fdbus-host-fdb" title="Permalink to this headline">¶</a></h4>
+<p>This file configures the security parameters of each host, including the following fields:</p>
+<ul class="simple">
+<li><strong>host</strong>: object type, the key of each element is the host name (“host_name”), and the value
+is the array type, which contains the security policy of the corresponding host.</li>
+<li><strong>host.”host_name”[…]</strong>: object type, which indicates the configuration of a security level.</li>
+<li><strong>host.”host_name”[…].level</strong>: number type, indicating the security level.</li>
+<li><strong>host.”host_name”[…].ip</strong>: array type, each element is the host ID represented by the IP address,
+meaning: the host with these IP addresses, the security level is <code class="docutils literal notranslate"><span class="pre">host.&quot;host_name&quot;[...].level</span></code>.
+If the IP is a “default” string, it means that there is no default security level for the host in
+the configuration file.</li>
+<li><strong>host.”host_name”[…].mac</strong>: array type, each element is the host ID represented by the MAC address,
+meaning the same as <code class="docutils literal notranslate"><span class="pre">host.&quot;host_name&quot;[...].ip</span></code>.</li>
+</ul>
+</div>
+<div class="section" id="server-configuration-file-etc-fdbus-server-server-name-fdb">
+<h4>Server Configuration file /etc/fdbus/server/server_name.fdb<a class="headerlink" href="#server-configuration-file-etc-fdbus-server-server-name-fdb" title="Permalink to this headline">¶</a></h4>
+<p>The Server configuration file is located in the <code class="docutils literal notranslate"><span class="pre">/etc/fdbus/server</span></code> directory. Each server has a
+configuration file. The file name specification is: <code class="docutils literal notranslate"><span class="pre">server_name+.fdb</span> <span class="pre">suffix</span></code>, which contains the
+following fields:</p>
+<ul class="simple">
+<li><strong>method</strong>: array type, the security policy that the configuration method calls.</li>
+<li><strong>method[…]</strong>: object type, defines the security policy for a collection of methods.</li>
+<li><strong>method[…].level</strong>: number type, indicating the security level</li>
+<li><strong>method[…].from</strong>: number type, which represents the minimum value of the method set. If it
+is a “default” string, it means that there is no default security level for the configuring method.</li>
+<li><strong>method[…].to</strong>: number type, which represents the maximum value of the method set. The
+overall meaning is: If a method ID is greater than or equal to <strong>method[…].from</strong>, less than
+or equal to <strong>method[…].to</strong>, its security level is <strong>method[…].level</strong>. Only clients with a
+security level greater than or equal to this level can call methods in this range.</li>
+<li><strong>event</strong>: array type, similar to the method except that it is configured with a
+security policy for broadcast monitoring. Only clients that meet the security level have
+the right to listen to the corresponding event.</li>
+<li><strong>permission</strong>: array type, configuring the access permissions of the server.</li>
+<li><strong>permission[…]</strong>: object type, which defines the configuration of a security level.</li>
+<li><strong>permission[…].level</strong>: number type, indicating the security level.</li>
+<li><strong>permission[…].gid</strong>: array type, if the element is string type, it means group name,
+if it is number type, it means group id. The meaning of the security policy is: If a client
+is in a certain group specified by the array, its security level is <strong>permission[…].level</strong>.
+If the field is a “default” string, it means that the client’s default security level cannot
+be found for the security policy.</li>
+<li><strong>permission[…].uid</strong>: array type, if the element is string type, it means user name, if it
+is number type, it means user id. The meaning of the security policy is: If the client id of
+a client is contained in an array, its security level is <strong>permission[…].level</strong>.</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="section" id="debugging-and-logging">
+<h2>Debugging and logging<a class="headerlink" href="#debugging-and-logging" title="Permalink to this headline">¶</a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">DBus</span></code> monitor from <code class="docutils literal notranslate"><span class="pre">DBus</span></code> is impressive: it can crawl all the messages on the <code class="docutils literal notranslate"><span class="pre">DBus</span></code> bus,
+and it can also set filters to crawl specific messages. The captured messages are very readable,
+and various data structures and field names can be displayed. Similarly, <code class="docutils literal notranslate"><span class="pre">FDBus</span></code> also provides a
+tool for crawling messages - log server, and its function is stronger. In addition to <code class="docutils literal notranslate"><span class="pre">FDBus</span></code>
+messages, it also supports debugging log output, and combines <code class="docutils literal notranslate"><span class="pre">FDBus</span></code> messages and debug logs to
+facilitate timing analysis.</p>
+<p>The log server is a normal server that mounted on the <code class="docutils literal notranslate"><span class="pre">FDBus</span></code>. Each endpoint contains its client,
+as shown in the following figure:</p>
+<a class="reference internal image-reference" href="_images/7.png"><img alt="_images/7.png" src="_images/7.png" style="width: 600px;" /></a>
+<p>Like the normal server, the log server runs up and registers with the <code class="docutils literal notranslate"><span class="pre">name</span> <span class="pre">server</span></code>, which broadcasts
+the LogClient in each endpoint. Later, when the endpoint sends an <code class="docutils literal notranslate"><span class="pre">FDBus</span></code> message, it will also send
+a copy to the log server through LogClient. In addition to the <code class="docutils literal notranslate"><span class="pre">FDBus</span></code> message content, the sent
+data also includes:</p>
+<ul class="simple">
+<li>Timestamp</li>
+<li>Transmitter and receiver names</li>
+<li>Message type (request, reply, broadcast, subscription, etc.)</li>
+</ul>
+<p>The protocol buffer is transmitted in binary format on the line and cannot be printed directly.
+For debugging convenience, the protocol buffer can convert the message into a text format that
+is easy to read, visually display the name and value of each member in the message, and expand
+the array type (repeated type) and nested type.</p>
+<p>For debug log output, <code class="docutils literal notranslate"><span class="pre">FDBus</span></code> has its own API and supports the following output levels
+(In ascending order of priority):</p>
+<ul class="simple">
+<li>Debug</li>
+<li>Information</li>
+<li>Warning</li>
+<li>Error</li>
+<li>Fatal</li>
+</ul>
+<p>As long as the log server is started, when the endpoint prints the debug log through the API,
+these logs are sent to the log server through LogClient. The log server can combine the debug
+log and the <code class="docutils literal notranslate"><span class="pre">FDBus</span></code> message to output, or can choose to output specific content separately.</p>
+<p>Regardless of which host the endpoint is deployed on, the log server can collect its <code class="docutils literal notranslate"><span class="pre">FDBus</span></code>
+messages and debug logs. The entire system can only run one log server, which is not convenient
+for distributed debugging. To this end, <code class="docutils literal notranslate"><span class="pre">FDBus</span></code> has another tool - log viewer, multiple log viewers
+can be started at the same time, all connected to the log server, get the current log information,
+and print on the standard output.</p>
+</div>
+<div class="section" id="fdbus-internal-structure">
+<h2>FDBus internal structure<a class="headerlink" href="#fdbus-internal-structure" title="Permalink to this headline">¶</a></h2>
+<p>The following figure is a block diagram of the internal components of <code class="docutils literal notranslate"><span class="pre">FDBus</span></code>:</p>
+<a class="reference internal image-reference" href="_images/8.png"><img alt="_images/8.png" src="_images/8.png" style="width: 600px;" /></a>
+<ul class="simple">
+<li><strong>Base platform abstraction layer</strong> - contains system-independent abstractions for adapting to different operating systems</li>
+<li><strong>Advanced platform abstraction layer</strong> - a middleware process model that contains the basic components that make up a process</li>
+<li><strong>IPC layer</strong> - interprocess communication model, including the basic components for implementing <code class="docutils literal notranslate"><span class="pre">IPC</span></code> communication</li>
+<li><strong>Server layer</strong> - provides service name resolution, networking, logging and debugging services</li>
+</ul>
+</div>
+<div class="section" id="conclusion">
+<h2>Conclusion<a class="headerlink" href="#conclusion" title="Permalink to this headline">¶</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">FDBus</span></code> provides a distributed <code class="docutils literal notranslate"><span class="pre">IPC</span></code> communication mechanism to support client-server communication
+across hosts, using service names instead of physical addresses as addressing modes, ensuring connectivity
+dynamics and reliability through various services and heartbeat reconnection mechanisms, thereby ensuring
+the nodes inside the system can be dynamically added and deleted, dynamically deployed, and arbitrarily
+restarted without managing the startup sequence and dependencies, thereby binding the separate modules
+together to form a solid whole. As an important part of <code class="docutils literal notranslate"><span class="pre">IPC</span></code>, protocol buffer supports a variety of complex
+data types, can define interfaces with idl and support automatic code generation, greatly reducing the job of
+serialization and deserialization. <code class="docutils literal notranslate"><span class="pre">FDBus</span></code> supports security policies, differentiates security levels from
+access, and ensures the security of the entire system.</p>
+<p><code class="docutils literal notranslate"><span class="pre">FDBus</span></code> is not only an <code class="docutils literal notranslate"><span class="pre">IPC</span></code> mechanism, but also a middleware development framework, which contains common
+components and basic models that are often used in the development of middleware, providing cross-platform
+and powerful support for middleware development.</p>
+<p>The source code of <code class="docutils literal notranslate"><span class="pre">FDBus</span></code> is open now, which expects more developers to use, test and improve, and become one
+of the options for many middleware development frameworks.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">FDBus Manual</a><ul>
+<li><a class="reference internal" href="#abstract">Abstract</a></li>
+<li><a class="reference internal" href="#background">Background</a></li>
+<li><a class="reference internal" href="#mainstream-ipc-framework-comparison">Mainstream IPC framework comparison</a></li>
+<li><a class="reference internal" href="#middleware-model-based-on-fdbus">Middleware model based on FDBus</a></li>
+<li><a class="reference internal" href="#fdbus-addressing-and-networking">FDBus addressing and networking</a><ul>
+<li><a class="reference internal" href="#server-address">Server address</a></li>
+<li><a class="reference internal" href="#server-naming-and-address-assignment">Server naming and address assignment</a></li>
+<li><a class="reference internal" href="#multi-host-networking">Multi-host networking</a></li>
+<li><a class="reference internal" href="#uniqueness-of-the-service-name">Uniqueness of the service name</a></li>
+<li><a class="reference internal" href="#heartbeat-detection-reconnection-and-online-offline-detection">Heartbeat detection, reconnection and online, offline detection</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#security">Security</a><ul>
+<li><a class="reference internal" href="#host-node-authentication">Host node authentication</a></li>
+<li><a class="reference internal" href="#service-access-authentication">Service access authentication</a></li>
+<li><a class="reference internal" href="#security-level-and-access-rights">Security level and access rights</a></li>
+<li><a class="reference internal" href="#security-policy-configuration-file">Security policy configuration file</a><ul>
+<li><a class="reference internal" href="#parameter-configuration-file-etc-fdbus-fdbus-fdb">Parameter configuration file /etc/fdbus/fdbus.fdb</a></li>
+<li><a class="reference internal" href="#host-configuration-file-etc-fdbus-host-fdb">Host configuration file /etc/fdbus/host.fdb</a></li>
+<li><a class="reference internal" href="#server-configuration-file-etc-fdbus-server-server-name-fdb">Server Configuration file /etc/fdbus/server/server_name.fdb</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#debugging-and-logging">Debugging and logging</a></li>
+<li><a class="reference internal" href="#fdbus-internal-structure">FDBus internal structure</a></li>
+<li><a class="reference internal" href="#conclusion">Conclusion</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="readme.html"
+                        title="previous chapter">Introduction</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/manual.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="readme.html" title="Introduction"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">FDbus 1.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2019, Jeremy ChenZhen.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.5.
+    </div>
+  </body>
+</html>

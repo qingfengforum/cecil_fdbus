@@ -1,0 +1,30 @@
+#IncludeRegexLine: ^[ 	]*#[ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/qf/01_qfCodelib/QfCodeLib/modules/FDBus/ref_code/workspace/fdbus/security/cJSON/cJSON.c
+string.h
+-
+stdio.h
+-
+math.h
+-
+stdlib.h
+-
+limits.h
+-
+ctype.h
+-
+locale.h
+-
+cJSON.h
+/home/qf/01_qfCodelib/QfCodeLib/modules/FDBus/ref_code/workspace/fdbus/security/cJSON/cJSON.h
+
+/home/qf/01_qfCodelib/QfCodeLib/modules/FDBus/ref_code/workspace/fdbus/security/cJSON/cJSON.h
+stddef.h
+-
+

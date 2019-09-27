@@ -1,0 +1,441 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Introduction &#8212; FDbus 1.0 documentation</title>
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="FDBus Manual" href="manual.html" />
+    <link rel="prev" title="Authors" href="authors.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="manual.html" title="FDBus Manual"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="authors.html" title="Authors"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">FDbus 1.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="introduction">
+<h1>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h1>
+<p><a class="reference external" href="https://fdbus.readthedocs.io/en/latest/?badge=latest">FDBus Documentation</a></p>
+<img alt="https://readthedocs.org/projects/fdbus/badge/?version=latest" src="https://readthedocs.org/projects/fdbus/badge/?version=latest" />
+<p><code class="docutils literal notranslate"><span class="pre">FDBus</span></code> is a middleware development framework targeting the following objectives:</p>
+<ul class="simple">
+<li>Inter-Process Communication (<code class="docutils literal notranslate"><span class="pre">IPC</span></code>) within single host and cross the network</li>
+<li>System abstraction (<code class="docutils literal notranslate"><span class="pre">Windows</span></code>, <code class="docutils literal notranslate"><span class="pre">Linux</span></code>, <code class="docutils literal notranslate"><span class="pre">QNX</span></code>)</li>
+<li>Components based on which middleware is built (job, worker, timer, watch…)</li>
+</ul>
+<p>It is something like <code class="docutils literal notranslate"><span class="pre">DBus</span></code> or <code class="docutils literal notranslate"><span class="pre">SOME/IP</span></code>, but with its own characteristic:</p>
+<ul class="simple">
+<li><strong>Distributed</strong> : unlike <code class="docutils literal notranslate"><span class="pre">DBus</span></code>, it has no central hub</li>
+<li><strong>High performance</strong> : endpoints talk to each other directly</li>
+<li><strong>Addressing by name</strong> : service is addressable through logic name</li>
+<li><strong>Address allocation</strong> : service address is allocated dynamically</li>
+<li><strong>Networking</strong> : communication inside host and cross hosts</li>
+<li><strong>IDL and code generation</strong> : using protocol buffer</li>
+<li><strong>Total slution</strong> : it is more than an <code class="docutils literal notranslate"><span class="pre">IPC</span></code> machanism. it is a middleware development framework</li>
+</ul>
+<p>Its usage can be found in the following fields:</p>
+<ul class="simple">
+<li>Infotainment; instrument cluster, TBox and other ECU with posix-compatible OS running</li>
+<li>Inter VM communication between guest OSes in hypervisor</li>
+<li>SOHO Gateway</li>
+<li>Instrument for distributed industry control</li>
+</ul>
+<div class="section" id="supported-system">
+<h2>Supported system<a class="headerlink" href="#supported-system" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">Linux</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">Windows</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">QNX</span></code></li>
+</ul>
+</div>
+<div class="section" id="dependence">
+<h2>Dependence<a class="headerlink" href="#dependence" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>cmake - 3.1.3 or above</li>
+<li>protocol buffer</li>
+<li>compiler supporting C++11</li>
+</ul>
+</div>
+<div class="section" id="download">
+<h2>Download<a class="headerlink" href="#download" title="Permalink to this headline">¶</a></h2>
+<p><a class="reference external" href="https://github.com/jeremyczhen/fdbus.git">https://github.com/jeremyczhen/fdbus.git</a></p>
+</div>
+<div class="section" id="documentation-blog">
+<h2>Documentation &amp; Blog<a class="headerlink" href="#documentation-blog" title="Permalink to this headline">¶</a></h2>
+<p><a class="reference external" href="https://blog.csdn.net/jeremy_cz/article/details/89060291">https://blog.csdn.net/jeremy_cz/article/details/89060291</a></p>
+</div>
+<div class="section" id="how-to-build">
+<h2>How to build<a class="headerlink" href="#how-to-build" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="for-ubuntu-host-version-running-at-host-machine">
+<h3>For Ubuntu host version (running at host machine)<a class="headerlink" href="#for-ubuntu-host-version-running-at-host-machine" title="Permalink to this headline">¶</a></h3>
+<p>Dependence:</p>
+<ul class="simple">
+<li>cmake, gcc are installed</li>
+</ul>
+<ol class="arabic simple">
+<li>build protocol buffer</li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="m">1</span>.1 <span class="nb">cd</span> ~/workspace
+<span class="m">1</span>.2 git clone https://github.com/protocolbuffers/protobuf.git <span class="c1">#get protobuf source code</span>
+<span class="m">1</span>.3 <span class="nb">cd</span> protobuf<span class="p">;</span>git submodule update --init --recursive
+<span class="m">1</span>.4 mkdir -p build/install<span class="p">;</span><span class="nb">cd</span> build <span class="c1">#create directory for out-of-source build</span>
+<span class="m">1</span>.5 cmake -DCMAKE_INSTALL_PREFIX<span class="o">=</span>install -DBUILD_SHARED_LIBS<span class="o">=</span><span class="m">1</span> ../cmake
+<span class="m">1</span>.6 make -j4 install <span class="c1">#build and install to build/install directory</span>
+</pre></div>
+</div>
+<ol class="arabic simple" start="2">
+<li>build fdbus</li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="m">2</span>.1 <span class="nb">cd</span> ~/workspace
+<span class="m">2</span>.2 git clone https://github.com/jeremyczhen/fdbus.git <span class="c1">#get fdbus source code</span>
+<span class="m">2</span>.3 <span class="nb">cd</span> fdbus<span class="p">;</span>mkdir -p build/install<span class="p">;</span><span class="nb">cd</span> build <span class="c1">#create directory for out-of-source build</span>
+<span class="m">2</span>.4 cmake -DSYSTEM_ROOT<span class="o">=</span>~/workspace/protobuf/build/install -DCMAKE_INSTALL_PREFIX<span class="o">=</span>install ../cmake
+<span class="m">2</span>.5 <span class="nv">PATH</span><span class="o">=</span>~/workspace/protobuf/build/install/bin:<span class="nv">$PATH</span> make <span class="c1">#set PATH to the directory where protoc can be found</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="for-cross-compiling-on-ubuntu-target-version">
+<h3>For cross compiling on Ubuntu (target version)<a class="headerlink" href="#for-cross-compiling-on-ubuntu-target-version" title="Permalink to this headline">¶</a></h3>
+<p>Dependence:</p>
+<ul class="simple">
+<li>cmake, gcc and toolchain are installed</li>
+</ul>
+<p>1 build protocol buffer</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="m">1</span>.1 <span class="nb">cd</span> ~/workspace
+<span class="m">1</span>.2 create toolchain.cmake <span class="c1">#create toolchain.cmake and set g++ and gcc for target build in cmake/toolchain.cmake (see below)</span>
+<span class="m">1</span>.3 git clone https://github.com/protocolbuffers/protobuf.git protobuf-host <span class="c1">#get protobuf source code for host build</span>
+<span class="m">1</span>.4 <span class="nb">cd</span> protobuf-host <span class="o">&amp;&amp;</span> git submodule update --init --recursive <span class="o">&amp;&amp;</span> <span class="nb">cd</span> ..
+<span class="m">1</span>.5 cp protobuf-host protobuf-target -r <span class="c1">#create a copy for cross compiling</span>
+<span class="m">1</span>.6 <span class="nb">cd</span> protobuf-host<span class="p">;</span>mkdir -p build/install<span class="p">;</span><span class="nb">cd</span> build <span class="c1">#create directory for out-of-source build</span>
+<span class="m">1</span>.7 cmake -DCMAKE_INSTALL_PREFIX<span class="o">=</span>install -DBUILD_SHARED_LIBS<span class="o">=</span><span class="m">1</span> ../cmake
+<span class="m">1</span>.8 make -j4 install <span class="c1">#build and install to build/install directory; now we have protoc running at host</span>
+<span class="m">1</span>.9 <span class="nb">cd</span> ../../protobuf-target<span class="p">;</span>mkdir -p build/install<span class="p">;</span><span class="nb">cd</span> build <span class="c1">#create directory for out-of-source build</span>
+<span class="m">1</span>.10 cmake -DCMAKE_INSTALL_PREFIX<span class="o">=</span>install -DBUILD_SHARED_LIBS<span class="o">=</span><span class="m">1</span> -DCMAKE_TOOLCHAIN_FILE<span class="o">=</span>../../toolchain.cmake ../cmake
+<span class="m">1</span>.11 <span class="nv">PATH</span><span class="o">=</span>~/workspace/protobuf-host/build/install/bin:<span class="nv">$PATH</span> make -j4 install <span class="c1">#build and install to build/install directory</span>
+</pre></div>
+</div>
+<ol class="arabic simple" start="2">
+<li>build fdbus</li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="m">2</span>.1 <span class="nb">cd</span> ~/workspace
+<span class="m">2</span>.2 git clone https://github.com/jeremyczhen/fdbus.git
+<span class="m">2</span>.3 <span class="nb">cd</span> fdbus<span class="p">;</span>mkdir -p build/install<span class="p">;</span><span class="nb">cd</span> build
+<span class="m">2</span>.4 cmake -DSYSTEM_ROOT<span class="o">=</span>~/workspace/protobuf-target/build/install -DCMAKE_INSTALL_PREFIX<span class="o">=</span>install -DCMAKE_TOOLCHAIN_FILE<span class="o">=</span>../../toolchain.cmake ../cmake
+<span class="m">2</span>.5 <span class="nv">PATH</span><span class="o">=</span>~/workspace/protobuf-host/build/install/bin:<span class="nv">$PATH</span> make <span class="c1">#set PATH to the directory where protoc can be found</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="for-qnx">
+<h3>For QNX<a class="headerlink" href="#for-qnx" title="Permalink to this headline">¶</a></h3>
+<p>The same as cross compiling, but when building fdbus, should add the following option to cmake since QNX doesn’t support peercred and eventfd:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>-Dfdbus_SOCKET_ENABLE_PEERCRED<span class="o">=</span>OFF -Dfdbus_PIPE_AS_EVENTFD<span class="o">=</span><span class="nb">true</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="for-android-ndk">
+<h3>For Android NDK<a class="headerlink" href="#for-android-ndk" title="Permalink to this headline">¶</a></h3>
+<blockquote>
+<div><p>Dependence:</p>
+<ul class="simple">
+<li>cmake, gcc are installed, also need android NDK</li>
+</ul>
+</div></blockquote>
+<p>1 build protocol buffer</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="m">1</span>.1 build host is the same as previously discussed
+<span class="m">1</span>.2 <span class="nb">cd</span> ./protobuf-target<span class="p">;</span>mkdir -p build/install<span class="p">;</span><span class="nb">cd</span> build <span class="c1">#create directory for out-of-source build</span>
+<span class="m">1</span>.3 cmake -DCMAKE_INSTALL_PREFIX<span class="o">=</span>install -DBUILD_SHARED_LIBS<span class="o">=</span><span class="m">1</span> -DANDROID_LINKER_FLAGS<span class="o">=</span><span class="s2">&quot;-landroid -llog&quot;</span> -Dprotobuf_BUILD_PROTOC_BINARIES<span class="o">=</span><span class="m">0</span> -Dprotobuf_BUILD_TESTS<span class="o">=</span><span class="m">0</span> -DCMAKE_TOOLCHAIN_FILE<span class="o">=</span>~/android-ndk-r20/build/cmake/android.toolchain.cmake ../cmake
+<span class="m">1</span>.4 <span class="nv">PATH</span><span class="o">=</span>~/workspace/protobuf-target/build/install/bin:<span class="nv">$PATH</span> make -j4 install <span class="c1">#build and install to build/install directory</span>
+</pre></div>
+</div>
+<p>2 build fdbus</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="m">2</span>.1 <span class="nb">cd</span> ~/workspace
+<span class="m">2</span>.2 git clone https://github.com/jeremyczhen/fdbus.git
+<span class="m">2</span>.3 <span class="nb">cd</span> fdbus<span class="p">;</span>mkdir -p build/install<span class="p">;</span><span class="nb">cd</span> build
+<span class="m">2</span>.4 cmake -DSYSTEM_ROOT<span class="o">=</span>~/workspace/protobuf-target/build/install -DCMAKE_INSTALL_PREFIX<span class="o">=</span>install -Dfdbus_ANDROID<span class="o">=</span>ON -DCMAKE_TOOLCHAIN_FILE<span class="o">=</span>~/android-ndk-r20/build/cmake/android.toolchain.cmake ../cmake
+<span class="m">2</span>.5 <span class="nv">PATH</span><span class="o">=</span>~/workspace/protobuf-host/build/install/bin:<span class="nv">$PATH</span> make <span class="c1">#set PATH to the directory where protoc can be found</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="for-windows-version">
+<h3>For Windows version<a class="headerlink" href="#for-windows-version" title="Permalink to this headline">¶</a></h3>
+<p>Dependence:</p>
+<ul class="simple">
+<li>cmake, msvc are installed</li>
+</ul>
+<p>1 build protocol buffer</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="m">1</span>.1 <span class="nb">cd</span> c:<span class="se">\w</span>orkspace
+<span class="m">1</span>.2 <span class="c1">#suppose source code of protocol buffer is already downloaded and placed at c:\workspace\protobuf</span>
+<span class="m">1</span>.3 <span class="nb">cd</span> protobuf<span class="p">;</span>mkdir -p cbuild<span class="se">\i</span>nstall<span class="p">;</span><span class="nb">cd</span> cbuild <span class="c1">#create directory for out-of-source build</span>
+<span class="m">1</span>.4 cmake -DCMAKE_INSTALL_PREFIX<span class="o">=</span>install ..<span class="se">\c</span>make
+<span class="m">1</span>.5 open protobuf.sln in c:<span class="se">\w</span>orkspace<span class="se">\p</span>rotobuf<span class="se">\c</span>build and build project INSTALL
+</pre></div>
+</div>
+<ol class="arabic simple" start="2">
+<li>build fdbus</li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="m">2</span>.1 <span class="nb">cd</span> ~/workspace
+<span class="m">2</span>.2 <span class="c1">#suppose source code of fdbus is already downloaded and placed at c:\workspace\fdbus</span>
+<span class="m">2</span>.3 <span class="nb">cd</span> fdbus<span class="p">;</span>mkdir -p build<span class="se">\i</span>nstall<span class="p">;</span><span class="nb">cd</span> build <span class="c1">#create directory for out-of-source build</span>
+<span class="m">2</span>.4 cmake -DSYSTEM_ROOT<span class="o">=</span>c:<span class="se">\w</span>orkspace<span class="se">\p</span>rotobuf<span class="se">\b</span>uild<span class="se">\i</span>nstall -DCMAKE_INSTALL_PREFIX<span class="o">=</span>install ..<span class="se">\c</span>make
+<span class="m">2</span>.5 copy c:<span class="se">\w</span>orkspace<span class="se">\p</span>rotobuf<span class="se">\c</span>build<span class="se">\i</span>nstall<span class="se">\b</span>in<span class="se">\p</span>rotoc.exe to the directory in PATH environment variable
+<span class="m">2</span>.6 open fdbus.sln in c:<span class="se">\w</span>orkspace<span class="se">\f</span>dbus<span class="se">\b</span>uild and build project INSTALL
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="how-to-run">
+<h2>How to run<a class="headerlink" href="#how-to-run" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="for-single-host">
+<h3>For single host<a class="headerlink" href="#for-single-host" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="m">1</span>. start name server:
+   &gt; name_server
+<span class="m">2</span>. start clients/servers
+</pre></div>
+</div>
+</div>
+<div class="section" id="for-multi-host">
+<h3>For multi-host<a class="headerlink" href="#for-multi-host" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="m">1</span>. start name server at host1:
+   host1&gt; name_server
+<span class="m">2</span>. start host server at host1:
+<span class="m">3</span>. start name server at host2:
+   host2&gt; name_server -u tcp://ip_of_host1:60000
+<span class="m">4</span>. start clients/servers at host1 and host2
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="example-of-toolchain-cmake-for-cross-compiling">
+<h2>example of toolchain.cmake for cross-compiling<a class="headerlink" href="#example-of-toolchain-cmake-for-cross-compiling" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>&gt;&gt;&gt;&gt; cat toolchain.cmake
+SET<span class="o">(</span>CMAKE_SYSTEM_NAME Linux<span class="o">)</span>
+SET<span class="o">(</span>CMAKE_CXX_COMPILER ~/project/android/workspace/prebuilts/gcc/linux-x86/aarch64/aarch64-linux-gnu-7.1.1/bin/aarch64-linux-gnu-g++<span class="o">)</span>
+SET<span class="o">(</span>CMAKE_C_COMPILER ~/project/android/workspace/prebuilts/gcc/linux-x86/aarch64/aarch64-linux-gnu-7.1.1/bin/aarch64-linux-gnu-gcc<span class="o">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="cmake-options">
+<h2>cmake options<a class="headerlink" href="#cmake-options" title="Permalink to this headline">¶</a></h2>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The following options can be specified with <code class="docutils literal notranslate"><span class="pre">-Dfdbus_XXX=ON/OFF</span></code> when running <code class="docutils literal notranslate"><span class="pre">cmake</span></code>.
+The status with <code class="docutils literal notranslate"><span class="pre">*</span></code> is set as default.</p>
+</div>
+<dl class="docutils">
+<dt><code class="docutils literal notranslate"><span class="pre">fdbus_BUILD_TESTS</span></code></dt>
+<dd><div class="first last line-block">
+<div class="line"><a href="#id1"><span class="problematic" id="id2">*</span></a><code class="docutils literal notranslate"><span class="pre">ON</span></code> : build examples</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">OFF</span></code>: don’t build examples</div>
+</div>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">fdbus_ENABLE_LOG</span></code></dt>
+<dd><div class="first last line-block">
+<div class="line"><a href="#id3"><span class="problematic" id="id4">*</span></a><code class="docutils literal notranslate"><span class="pre">ON</span></code> : enable log output of fdbus lib</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">OFF</span></code>: disable log output of fdbus lib</div>
+</div>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">fdbus_LOG_TO_STDOUT</span></code></dt>
+<dd><div class="first last line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">ON</span></code> : send fdbus log to stdout (terminal)</div>
+<div class="line"><a href="#id5"><span class="problematic" id="id6">*</span></a><code class="docutils literal notranslate"><span class="pre">OFF</span></code>: fdbus log is sent to log server</div>
+</div>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">fdbus_ENABLE_MESSAGE_METADATA</span></code></dt>
+<dd><div class="first last line-block">
+<div class="line"><a href="#id7"><span class="problematic" id="id8">*</span></a><code class="docutils literal notranslate"><span class="pre">ON</span></code> : time stamp is included in fdbus message to track delay of message during request-reply interaction</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">OFF</span></code>: time stamp is disabled</div>
+</div>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">fdbus_SOCKET_BLOCKING_CONNECT</span></code></dt>
+<dd><div class="first last line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">ON</span></code> : socket method connect() will be blocked forever if server is not ready to accept</div>
+<div class="line"><a href="#id9"><span class="problematic" id="id10">*</span></a><code class="docutils literal notranslate"><span class="pre">OFF</span></code>: connect() will be blocked with timer to avoid permanent blocking</div>
+</div>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">fdbus_SOCKET_ENABLE_PEERCRED</span></code></dt>
+<dd><div class="first last line-block">
+<div class="line"><a href="#id11"><span class="problematic" id="id12">*</span></a><code class="docutils literal notranslate"><span class="pre">ON</span></code> : peercred of UDS (Unix Domain Socket) is enabled</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">OFF</span></code>: peercred of UDS is disabled</div>
+</div>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">fdbus_ALLOC_PORT_BY_SYSTEM</span></code></dt>
+<dd><div class="first last line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">ON</span></code> : socket number of servers are allocated by the system</div>
+<div class="line"><a href="#id13"><span class="problematic" id="id14">*</span></a><code class="docutils literal notranslate"><span class="pre">OFF</span></code>: socket number of servers are allocated by name server</div>
+</div>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">fdbus_SECURITY</span></code></dt>
+<dd><div class="first last line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">ON</span></code> : enable security</div>
+<div class="line"><a href="#id15"><span class="problematic" id="id16">*</span></a><code class="docutils literal notranslate"><span class="pre">OFF</span></code>: disable security</div>
+</div>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The following options can be specified with
+<code class="docutils literal notranslate"><span class="pre">-DMACRO_DEF='VARIABLE=value;VARIABLE=value'</span></code></p>
+</div>
+<dl class="docutils">
+<dt><code class="docutils literal notranslate"><span class="pre">FDB_CFG_SOCKET_PATH</span></code></dt>
+<dd><div class="first last line-block">
+<div class="line">specify directory of UDS file</div>
+<div class="line">default: /tmp</div>
+</div>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">CONFIG_SOCKET_CONNECT_TIMEOUT</span></code></dt>
+<dd><div class="first last line-block">
+<div class="line">specify timeout of connect() when connect to socket server in ms.
+“<code class="docutils literal notranslate"><span class="pre">0</span></code>” means block forever.</div>
+<div class="line">default: 2000</div>
+</div>
+</dd>
+</dl>
+</div>
+<div class="section" id="security-concept">
+<h2>Security concept<a class="headerlink" href="#security-concept" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="authentication-of-client">
+<h3>Authentication of client:<a class="headerlink" href="#authentication-of-client" title="Permalink to this headline">¶</a></h3>
+<blockquote>
+<div><div class="line-block">
+<div class="line">1. server registers its name to <code class="docutils literal notranslate"><span class="pre">name</span> <span class="pre">server</span></code>;</div>
+<div class="line">2. <code class="docutils literal notranslate"><span class="pre">name</span> <span class="pre">server</span></code> reply with URL and token;</div>
+<div class="line">3. server binds to the URL and holds the token;</div>
+<div class="line">4. client requests name resolution from <code class="docutils literal notranslate"><span class="pre">name</span> <span class="pre">server</span></code>;</div>
+<div class="line">5. <code class="docutils literal notranslate"><span class="pre">name</span> <span class="pre">server</span></code> authenticate client by checking peercred
+(<code class="docutils literal notranslate"><span class="pre">SO_PEERCRED</span></code> option of socket), including <code class="docutils literal notranslate"><span class="pre">UID</span></code>, <code class="docutils literal notranslate"><span class="pre">GID</span></code> of the client</div>
+<div class="line">6. if success, <code class="docutils literal notranslate"><span class="pre">name</span> <span class="pre">server</span></code> gives URL and token of requested server to
+the client</div>
+<div class="line">7. client connects to the server with URL followed by sending the token
+to the server</div>
+<div class="line">8. server verify the token and grant the connection if pass;
+for unauthorized client, since it does not have a valid token, server will
+drop the connection</div>
+<div class="line">9. <code class="docutils literal notranslate"><span class="pre">name</span> <span class="pre">server</span></code> can assign multiple tokens to server but only send one
+of them to the client according to security level of the client</div>
+</div>
+</div></blockquote>
+</div>
+<div class="section" id="authenication-of-host">
+<h3>Authenication of host<a class="headerlink" href="#authenication-of-host" title="Permalink to this headline">¶</a></h3>
+<p>TBD</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Introduction</a><ul>
+<li><a class="reference internal" href="#supported-system">Supported system</a></li>
+<li><a class="reference internal" href="#dependence">Dependence</a></li>
+<li><a class="reference internal" href="#download">Download</a></li>
+<li><a class="reference internal" href="#documentation-blog">Documentation &amp; Blog</a></li>
+<li><a class="reference internal" href="#how-to-build">How to build</a><ul>
+<li><a class="reference internal" href="#for-ubuntu-host-version-running-at-host-machine">For Ubuntu host version (running at host machine)</a></li>
+<li><a class="reference internal" href="#for-cross-compiling-on-ubuntu-target-version">For cross compiling on Ubuntu (target version)</a></li>
+<li><a class="reference internal" href="#for-qnx">For QNX</a></li>
+<li><a class="reference internal" href="#for-android-ndk">For Android NDK</a></li>
+<li><a class="reference internal" href="#for-windows-version">For Windows version</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#how-to-run">How to run</a><ul>
+<li><a class="reference internal" href="#for-single-host">For single host</a></li>
+<li><a class="reference internal" href="#for-multi-host">For multi-host</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#example-of-toolchain-cmake-for-cross-compiling">example of toolchain.cmake for cross-compiling</a></li>
+<li><a class="reference internal" href="#cmake-options">cmake options</a></li>
+<li><a class="reference internal" href="#security-concept">Security concept</a><ul>
+<li><a class="reference internal" href="#authentication-of-client">Authentication of client:</a></li>
+<li><a class="reference internal" href="#authenication-of-host">Authenication of host</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="authors.html"
+                        title="previous chapter">Authors</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="manual.html"
+                        title="next chapter">FDBus Manual</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/readme.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="manual.html" title="FDBus Manual"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="authors.html" title="Authors"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">FDbus 1.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2019, Jeremy ChenZhen.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.5.
+    </div>
+  </body>
+</html>

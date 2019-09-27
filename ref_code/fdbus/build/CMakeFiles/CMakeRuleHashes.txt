@@ -1,0 +1,11 @@
+# Hashes of file build rules.
+1336cc82a408628856893d92e630f261 CMakeFiles/build_proto_source.install
+d0463853e2f0952ea8ccaf39c9785022 CMakeFiles/common.base.Example
+d0463853e2f0952ea8ccaf39c9785022 CMakeFiles/common.base.MessageHeader
+d0463853e2f0952ea8ccaf39c9785022 CMakeFiles/common.base.NameServer
+d0463853e2f0952ea8ccaf39c9785022 CMakeFiles/common.base.Token
+724f0be133bd0f731e2ca80e3e1db95a CMakeFiles/uninstall
+5d884486c5c39c1a01179996f926c63b idl-gen/common.base.Example.pb.cc
+abe94d78251fb9886432241fd56537f0 idl-gen/common.base.MessageHeader.pb.cc
+92753f2a2b64dbb3dd1b8d152e70c914 idl-gen/common.base.NameServer.pb.cc
+f26bc981f109501202463d5c15bd11d5 idl-gen/common.base.Token.pb.cc
